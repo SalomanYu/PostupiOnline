@@ -63,6 +63,7 @@ def create_table_for_programs(db_name: str):
     cursor.execute("""CREATE TABLE IF NOT EXISTS program(
         programID INTEGER,
         specID INTEGER REFERENCES specialization(specID),
+        institutionID INTEGER REFERENCES institution(institutionID),
         name VARCHAR(255),
         description TEXT,
         direction VARCHAR(255),
@@ -120,7 +121,7 @@ def add_contact(data:Contact, log:logging = "", db_name: str = ""):
 def add_program(data:Program, log:logging = "", db_name: str = ""):
     create_table_for_programs(db_name)
     db, cursor = connect_to_db(db_name)
-    cursor.execute(f"INSERT INTO program(programID, specID, name, description, direction, form, img, cost, budget_places, payment_places, budget_points ,payment_points) VALUES({','.join(['?' for i in data])})", tuple(data))
+    cursor.execute(f"INSERT INTO program(programID, specID, institutionID, name, description, direction, form, img, cost, budget_places, payment_places, budget_points ,payment_points) VALUES({','.join(['?' for i in data])})", tuple(data))
     db.commit()
     db.close()
     log.info('Добавлена программа %s', data.name)

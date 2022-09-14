@@ -48,6 +48,7 @@ class Specialization(NamedTuple):
 class Program(NamedTuple):
 	programID: int
 	specID:str
+	institutionID: str
 	name: str
 	description: str
 	direction: str

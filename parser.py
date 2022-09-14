@@ -5,6 +5,7 @@ import database
 from config import  FORM_EDUCATION_COLLEGE, FORM_EDUCATION_VUZ, FORM_EDUCATION_VUZ, Contact, Profession, Program, Specialization, Institution, get_soup, get_base_information, start_logging
 from rich.progress import track
 
+current_institutionID = None 
 
 def main():
 	institutiones_page = 1
@@ -18,9 +19,11 @@ def main():
 		institutiones_page += 1
 
 def parse_institution(institution:BeautifulSoup):
+	global current_institutionID
 	institution_basic = get_base_information(item_soup=institution)
 	if not institution_basic: return
 	institutionID = institution_basic.url.split('/')[-2]
+	current_institutionID = institutionID
 	institution_soup = get_soup(institution_basic.url)
 	
 	try: description = institution_soup.find("div", class_='descr-min').text
@@ -116,6 +119,7 @@ def parse_programs(spec_url):
 			database.add_program(data=Program(
 				programID=programID,
 				specID=specID,
+				institutionID=current_institutionID,
 				name=program_basic.name,
 				direction=program_basic.direction,
 				description=description,
@@ -148,7 +152,7 @@ if __name__ == "__main__":
 	if sys.argv[1] == "-institution":
 		page_count = 52
 		ul_class_name_for_list_institutions = "list-unstyled list-wrap"
-		domain = "https://postupi.online/institutioni/"
+		domain = "https://postupi.online/vuzi/"
 		form_educations = FORM_EDUCATION_VUZ
 		database_name = "postupi_online_institution"
 	elif sys.argv[1] == "-college":
