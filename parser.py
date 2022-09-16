@@ -26,6 +26,11 @@ def parse_institution(institution:BeautifulSoup):
 	current_institutionID = institutionID
 	institution_soup = get_soup(institution_basic.url)
 	
+	# Пробуем взять полное наименование на странице программы, 
+	try: institution_name = institution_soup.find("h1", class_='bg-nd__h').text
+	# если не получается, то берем наименование с той страницы, где был список программ 
+	except: institution_name = institution_basic.name
+
 	try: description = institution_soup.find("div", class_='descr-min').text
 	except: description = ''
 	try: facts = "\nФакты:" + " | ".join([fact.text for fact in institution_soup.find("ul", class_='facts-list-nd').find_all('li')])	
@@ -33,7 +38,7 @@ def parse_institution(institution:BeautifulSoup):
 	
 	database.add_institution(Institution(
 		institutionID=institutionID,
-		name=institution_basic.name,
+		name=institution_name,
 		description=description+facts,
 		img=institution_basic.img,
 		logo=institution_basic.logo,
@@ -74,6 +79,7 @@ def parse_specialization(institution_url):
 			if not spec_list:raise AttributeError
 		except AttributeError:
 			break
+
 		# log.warning("Страница со специализациями № %d: %s", spec_page, url)
 		spec_page += 1
 		for item in spec_list:
@@ -112,6 +118,9 @@ def parse_programs(spec_url):
 			if not program_basic:continue
 			soup_program = get_soup(program_basic.url)
 			programID = program_basic.url.split('/')[-2]
+			try: program_name = soup_program.find("h1", class_='bg-nd__h').text
+			# если не получается, то берем наименование с той страницы, где был список программ 
+			except: program_name = program_basic.name
 			try:form = [detail.find_all('span')[-1].text for detail in soup_program.find_all('div', class_='detail-box__item') if "Уровень образования" in detail.text][0]
 			except:form = 'Бакалавриат'
 			try:description = soup_program.find('div', class_='descr-max').text
@@ -120,7 +129,7 @@ def parse_programs(spec_url):
 				programID=programID,
 				specID=specID,
 				institutionID=current_institutionID,
-				name=program_basic.name,
+				name=program_name,
 				direction=program_basic.direction,
 				description=description,
 				form=form,
