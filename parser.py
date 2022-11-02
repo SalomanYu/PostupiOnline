@@ -104,7 +104,7 @@ def parse_specialization(institution_url):
 def parse_programs(spec_url):
 	specID = spec_url.split('/')[-2]
 	program_page = 1
-	url = spec_url + f"?page_num={program_page}"
+	# url = spec_url + f"?page_num={program_page}"
 
 	while True:
 		soup = get_soup(spec_url + f"?page_num={program_page}")
@@ -170,9 +170,14 @@ if __name__ == "__main__":
 		domain = "https://postupi.online/ssuzy/"
 		form_educations = FORM_EDUCATION_COLLEGE
 		database_name = "postupi_online_college"
-
+	else:
+		exit("Запустите программму с дополнительным параметром -institution ИЛИ -college")
+	import time
+	start = time.monotonic()
 	log = start_logging()
 	main()
+	end = time.monotonic()
+	print(f"Время: {end-start} сек.")
 	# Парсим МФТИ
 	# soup = get_soup('https://dolgoprudniy.postupi.online/institutioni/')
 	# parse_institution(soup)

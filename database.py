@@ -63,7 +63,7 @@ def create_table_for_programs(db_name: str):
     cursor.execute("""CREATE TABLE IF NOT EXISTS program(
         programID INTEGER,
         specID INTEGER REFERENCES specialization(specID),
-        institutionID INTEGER REFERENCES institution(institutionID),
+        institutionID VARCHAR(50) REFERENCES institution(institutionID),
         name VARCHAR(255),
         description TEXT,
         direction VARCHAR(255),
