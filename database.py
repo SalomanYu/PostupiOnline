@@ -98,7 +98,7 @@ def add_institution(data:Institution, log:logging = "", db_name: str = ""):
     cursor.execute(f"INSERT INTO institution(institutionID, name , description, img, logo, cost, budget_places, payment_places, budget_points ,payment_points) VALUES({','.join(['?' for i in data])})", tuple(data))
     db.commit()
     db.close()
-    log.info('Добавлен ВУЗ %s', data.name)
+    # log.info('Добавлен ВУЗ %s', data.name)
 
 def add_spec(data:Specialization, log:logging = "", db_name: str = ""):
     create_table_for_specialization(db_name)
@@ -106,7 +106,7 @@ def add_spec(data:Specialization, log:logging = "", db_name: str = ""):
     cursor.execute(f"INSERT INTO specialization(specID, institutionID, name , description, direction, img, cost, budget_places, payment_places, budget_points ,payment_points) VALUES({','.join(['?' for i in data])})", tuple(data))
     db.commit()
     db.close()
-    log.info('Добавлен специализация %s', data.name)
+    # log.info('Добавлен специализация %s', data.name)
 
 
 def add_contact(data:Contact, log:logging = "", db_name: str = ""):
@@ -115,7 +115,7 @@ def add_contact(data:Contact, log:logging = "", db_name: str = ""):
     cursor.execute(f"INSERT INTO contact(website, email, phones, address, institutionID) VALUES({','.join(['?' for i in data])})", tuple(data))
     db.commit()
     db.close() 
-    log.info('Добавлен Контакт %s', data.website)
+    # log.info('Добавлен Контакт %s', data.website)
 
 
 def add_program(data:Program, log:logging = "", db_name: str = ""):
@@ -124,7 +124,7 @@ def add_program(data:Program, log:logging = "", db_name: str = ""):
     cursor.execute(f"INSERT INTO program(programID, specID, institutionID, name, description, direction, form, img, cost, budget_places, payment_places, budget_points ,payment_points) VALUES({','.join(['?' for i in data])})", tuple(data))
     db.commit()
     db.close()
-    log.info('Добавлена программа %s', data.name)
+    # log.info('Добавлена программа %s', data.name)
 
 
 def add_profession(data:Profession, log:logging = "", db_name: str = ""):
@@ -133,7 +133,7 @@ def add_profession(data:Profession, log:logging = "", db_name: str = ""):
     cursor.execute(f"INSERT INTO profession(programID, name, img) VALUES({','.join(['?' for i in data])})", tuple(data))
     db.commit()
     db.close()
-    log.info('Добавлена профессия %s', data.name)
+    # log.info('Добавлена профессия %s', data.name)
 
 
 if __name__ == "__main__":

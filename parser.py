@@ -177,7 +177,7 @@ if __name__ == "__main__":
 	log = start_logging()
 	main()
 	end = time.monotonic()
-	print(f"Время: {end-start} сек.")
+	print(f"Time: {end-start} сек.")
 	# Парсим МФТИ
 	# soup = get_soup('https://dolgoprudniy.postupi.online/institutioni/')
 	# parse_institution(soup)
