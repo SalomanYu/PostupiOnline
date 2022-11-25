@@ -24,6 +24,7 @@ class Institution(NamedTuple):
 	payment_places: int
 	budget_score: float
 	payment_score: float
+	url: str
 
 class Contact(NamedTuple):
 	website: str
@@ -44,6 +45,7 @@ class Specialization(NamedTuple):
 	payment_places: int
 	budget_score: float
 	payment_score: float
+	url: str
 
 class Program(NamedTuple):
 	programID: int
@@ -59,6 +61,8 @@ class Program(NamedTuple):
 	payment_places: int
 	budget_score: float
 	payment_score: float
+	subjects: str
+	url: str
 
 class Profession(NamedTuple):
 	programID: int
@@ -83,14 +87,6 @@ def get_soup(url):
 	req = requests.post(url, headers=HEADERS)
 	soup = BeautifulSoup(req.text, 'lxml')
 	return soup
-
-def start_logging() -> logging:
-	f = open("parser_log.log", 'w')
-	f.write('')
-	f.close()
-	logging.basicConfig(filename="parser_log.log", encoding='utf-8', level=logging.DEBUG, format='%(asctime)s  %(name)s  %(levelname)s: %(message)s')
-	logging.getLogger("urllib3").setLevel(logging.WARNING) # Без этого urllib3 выводит страшные большие белые сообщения
-	return logging
 
 def get_base_information(item_soup: BeautifulSoup) -> BasicPageInfo:
 	score_list = item_soup.find_all('p', class_='list__score')
