@@ -124,7 +124,8 @@ class Parser:
 		vuzId = basic.url.split("/")[vuzIdPositionInUrl]
 		specId = re.findall("\d+.\d+.\d+", basic.direction)[0]
 		direction = basic.direction.split(specId)[-1]
-		formEducation = [detail.find_all('span')[-1].text for detail in programSoup.find_all('div', class_='detail-box__item') if "Уровень образования" in detail.text][0]
+		try: formEducation = [detail.find_all('span')[-1].text for detail in programSoup.find_all('div', class_='detail-box__item') if "Уровень образования" in detail.text][0]
+		except: formEducation = "Бакалавриат"
 		try:subjects = " | ".join(self.get_subjects(programSoup))
 		except IndexError: subjects = "" 
 		if programSoup.find("h1", class_='bg-nd__h'): title = programSoup.find("h1", class_='bg-nd__h').text
