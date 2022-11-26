@@ -86,8 +86,9 @@ class Parser:
 
 			for item in spec_list:
 				specialization = self.get_specialization(item)
-				database.add_spec(specialization, db_name=self.dbname)
-				self.parse_specialization_programs(spec_url=specialization.url)
+				if specialization:
+					database.add_spec(specialization, db_name=self.dbname)
+					self.parse_specialization_programs(spec_url=specialization.url)
 			
 				
 	def get_specialization(self, soup: BeautifulSoup) -> config.Specialization | None:
@@ -109,8 +110,9 @@ class Parser:
 			except:break
 			for item in programs_list:
 				program = self.get_program(item)
-				database.add_program(program, db_name=self.dbname)
-				if program: self.parse_professions(program.url)
+				if program:
+					database.add_program(program, db_name=self.dbname)
+					self.parse_professions(program.url)
 
 				
 	def get_program(self, soup: BeautifulSoup) -> config.Program | None:
