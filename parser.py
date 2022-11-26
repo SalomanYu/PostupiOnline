@@ -123,7 +123,8 @@ class Parser:
 		specId = re.findall("\d+.\d+.\d+", basic.direction)[0]
 		direction = basic.direction.split(specId)[-1]
 		formEducation = [detail.find_all('span')[-1].text for detail in programSoup.find_all('div', class_='detail-box__item') if "Уровень образования" in detail.text][0]
-		subjects = " | ".join(self.get_subjects(programSoup))
+		try:subjects = " | ".join(self.get_subjects(programSoup))
+		except IndexError: subjects = "" 
 		if programSoup.find("h1", class_='bg-nd__h'): title = programSoup.find("h1", class_='bg-nd__h').text
 		else: title = basic.name
 		if programSoup.find('div', class_='descr-max'): description = programSoup.find('div', class_='descr-max').text
