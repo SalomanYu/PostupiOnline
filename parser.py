@@ -12,13 +12,14 @@ specializationIdPositionInUrl = -2
 
 
 class Parser:
-	def __init__(self, dbname:str, formEducations: tuple[str], classnameForListIntitutions: str, pageCount: int, domain: str):
+	def __init__(self, dbname:str, formEducations: tuple[str], classnameForListIntitutions: str, pageCount: int, domain: str, defaultFormEducation: str):
 		self.dbname = dbname
 		self.formEducations = formEducations
 		self.institutionesPage = 1
 		self.classnameForListIntitutions = classnameForListIntitutions
 		self.pageCount = pageCount
 		self.domain = domain
+		self.defaultFormEducation = defaultFormEducation
 
 	def start(self):
 		for _ in track(range(self.pageCount), description="[yellow]ProgressBar"):
@@ -125,7 +126,7 @@ class Parser:
 		specId = re.findall("\d+.\d+.\d+", basic.direction)[0]
 		direction = basic.direction.split(specId)[-1]
 		try: formEducation = [detail.find_all('span')[-1].text for detail in programSoup.find_all('div', class_='detail-box__item') if "Уровень образования" in detail.text][0]
-		except: formEducation = "Бакалавриат"
+		except: formEducation = self.defaultFormEducation
 		try:subjects = " | ".join(self.get_subjects(programSoup))
 		except IndexError: subjects = "" 
 		if programSoup.find("h1", class_='bg-nd__h'): title = programSoup.find("h1", class_='bg-nd__h').text
