@@ -42,10 +42,11 @@ class Parser:
 		except: institution_name = basic.name
 
 		try: description = institution_soup.find("div", class_='descr-min').text
-		except: description = ''
+		except: 
+			try:description = institution_soup.find("p", class_='descr-min').text
+			except: description = ""
 		try: facts = "\nФакты:" + " | ".join([fact.text for fact in institution_soup.find("ul", class_='facts-list-nd').find_all('li')])	
 		except: facts = ''
-		
 		database.add_institution(config.Institution(
 			institutionID=institutionID,
 			name=institution_name,
