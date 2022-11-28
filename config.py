@@ -85,13 +85,13 @@ class BasicPageInfo(NamedTuple):
 
 def get_soup(url) -> BeautifulSoup | None:
 	try:
-		req = requests.post(url, headers=HEADERS, verify=False)
+		req = requests.post(url, headers=HEADERS)
 		soup = BeautifulSoup(req.text, 'lxml')
 	except:
 		print(f"Failed connection to: {url}\nTry again after 1 minute.")
 		time.sleep(60)
 		try:
-			req = requests.post(url, headers=HEADERS, verify=False)
+			req = requests.post(url, headers=HEADERS)
 			soup = BeautifulSoup(req.text, 'lxml')
 		except:
 			return None
