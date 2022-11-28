@@ -25,6 +25,7 @@ class Parser:
 		for _ in track(range(self.pageCount), description="[yellow]ProgressBar"):
 			url = self.domain + f"?page_num={self.institutionesPage}"
 			soup = config.get_soup(url)
+			if not soup: continue
 			institutions = soup.find("ul", class_=self.classnameForListIntitutions).find_all('li')
 			for institution in institutions:	
 				self.parse_institution(institution)
@@ -33,9 +34,10 @@ class Parser:
 	def parse_institution(self, institution:BeautifulSoup):
 		basic = config.get_base_information(item_soup=institution)
 		if not basic: return
-		institutionID = basic.url.split('/')[-2]
 		institution_soup = config.get_soup(basic.url)
-		
+		if not institution_soup: return
+
+		institutionID = basic.url.split('/')[-2]
 		try: institution_name = institution_soup.find("h1", class_='bg-nd__h').text
 		except: institution_name = basic.name
 
@@ -79,6 +81,7 @@ class Parser:
 		while True:
 			spec_page += 1
 			soup = config.get_soup(institution_url + f'?page_num={spec_page}')
+			if not soup: break
 			try:
 				spec_list = soup.find("ul", class_='list-unstyled list-wrap').find_all('li')
 				if not spec_list:raise AttributeError
@@ -107,6 +110,7 @@ class Parser:
 		while True:
 			program_page += 1
 			soup = config.get_soup(spec_url + f"?page_num={program_page}")
+			if not soup: break
 			try:programs_list = soup.find("ul", class_='list-unstyled list-wrap').find_all('li')
 			except:break
 			for item in programs_list:
@@ -121,6 +125,7 @@ class Parser:
 		if not basic:return
 
 		programSoup = config.get_soup(basic.url)
+		if not programSoup: return
 		programID = basic.url.split('/')[-2]
 		vuzId = basic.url.split("/")[vuzIdPositionInUrl]
 		specId = re.findall("\d+.\d+.\d+", basic.direction)[0]
@@ -151,6 +156,7 @@ class Parser:
 		url = program_url+'professii/'
 		programID = int(program_url.split('/')[-2])
 		soup = config.get_soup(url)
+		if not soup: return
 		professions_list = soup.find_all("li", class_='list-col')
 		for prof in professions_list:
 			database.add_profession(data=config.Profession(

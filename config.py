@@ -1,4 +1,4 @@
-import logging
+import time
 from typing import NamedTuple
 import requests
 from bs4 import BeautifulSoup
@@ -83,9 +83,19 @@ class BasicPageInfo(NamedTuple):
 	budget_places: int
 	payment_places: int
 
-def get_soup(url):
-	req = requests.post(url, headers=HEADERS)
-	soup = BeautifulSoup(req.text, 'lxml')
+def get_soup(url) -> BeautifulSoup | None:
+	try:
+		req = requests.post(url, headers=HEADERS, verify=False)
+		soup = BeautifulSoup(req.text, 'lxml')
+	except:
+		print(f"Failed connection to: {url}\nTry again after 1 minute.")
+		time.sleep(60)
+		try:
+			req = requests.post(url, headers=HEADERS, verify=False)
+			soup = BeautifulSoup(req.text, 'lxml')
+		except:
+			return None
+	
 	return soup
 
 def get_base_information(item_soup: BeautifulSoup) -> BasicPageInfo:
